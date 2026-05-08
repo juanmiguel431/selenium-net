@@ -1,4 +1,5 @@
 ﻿using EaFramework.Driver;
+using EaFramework.Extensions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
@@ -18,27 +19,21 @@ public class ProductFormPage
         return _driver.Driver.FindElement(by);
     }
     
-    private IWebElement NameInput => GetElement(By.Name("Name"));
-    private IWebElement DescriptionInput => GetElement(By.Name("Description"));
-    private IWebElement PriceInput => GetElement(By.Name("Price"));
+    private IWebElement NameElement => GetElement(By.Name("Name"));
+    private IWebElement DescriptionElement => GetElement(By.Name("Description"));
+    private IWebElement PriceElement => GetElement(By.Name("Price"));
+    private IWebElement ProductTypeElement => GetElement(By.Name("ProductType"));
     
-    private SelectElement ProductTypeSelect
-    {
-        get
-        {
-            var element = GetElement(By.Name("ProductType"));
-            return new SelectElement(element);
-        }
-    }
 
     private void ClickCreate() => GetElement(By.Id("Create")).Submit();
     
     public void CreateProduct(string name, string description, string price, string productType)
     {
-        NameInput.SendKeys(name);
-        DescriptionInput.SendKeys(description);
-        PriceInput.SendKeys(price);
-        ProductTypeSelect.SelectByText(productType);
+        NameElement.SendKeys(name);
+        DescriptionElement.SendKeys(description);
+        PriceElement.SendKeys(price);
+        ProductTypeElement.SelectDropdownByText(productType);
+        
         ClickCreate();
     }
 }
