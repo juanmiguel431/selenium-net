@@ -1,4 +1,5 @@
 ﻿using EaApplicationTest.Models;
+using EaApplicationTest.Pages;
 using EaFramework.Config;
 using EaFramework.Driver;
 using OpenQA.Selenium;
@@ -24,19 +25,15 @@ public class UnitTest1
     {
         _settings.BrowserType = BrowserType.Chrome;
         using var driver = new DriverFixture(_settings);
-
-        driver.Driver.FindElement(By.LinkText("Product")).Click();
         
-        driver.Driver.FindElement(By.LinkText("Create")).Click();
-
-        driver.Driver.FindElement(By.Name("Name")).SendKeys("Product 1");
-        driver.Driver.FindElement(By.Name("Description")).SendKeys("Description 1");
-        driver.Driver.FindElement(By.Name("Price")).SendKeys("1000");
-
-        var select = new SelectElement(driver.Driver.FindElement(By.Name("ProductType")));
-        select.SelectByText("CPU");
+        var homePage = new HomePage(driver);
+        var productListPage = new ProductListPage(driver);
+        var productFormPage = new ProductFormPage(driver);
         
-        driver.Driver.FindElement(By.Id("Create")).Submit();
+        homePage.ClickProduct();
+        productListPage.ClickCreate();
+        
+        productFormPage.CreateProduct("Product 1", "Description 1", "1000", "CPU");
     }
     
     [Theory]
