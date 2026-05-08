@@ -1,16 +1,29 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 
 namespace EaApplicationTest;
 
 public class UnitTest1 : IDisposable
 {
-    private readonly ChromeDriver _driver;
+    private readonly IWebDriver _driver;
 
     public UnitTest1()
     {
-        _driver = new ChromeDriver();
+        _driver = GetDriverType("Firefox");
+    }
+
+    private IWebDriver GetDriverType(string name)
+    {
+        return name switch
+        {
+            "Chrome" => new ChromeDriver(),
+            "Firefox" => new FirefoxDriver(),
+            "Edge" => new EdgeDriver(),
+            _ => new ChromeDriver()
+        };
     }
     
     [Fact]
