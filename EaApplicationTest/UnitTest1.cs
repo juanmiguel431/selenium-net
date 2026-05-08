@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using EaApplicationTest.Models;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
@@ -12,16 +13,16 @@ public class UnitTest1 : IDisposable
 
     public UnitTest1()
     {
-        _driver = GetDriverType("Firefox");
+        _driver = GetDriverType(BrowserType.Firefox);
     }
 
-    private IWebDriver GetDriverType(string name)
+    private static IWebDriver GetDriverType(BrowserType type)
     {
-        return name switch
+        return type switch
         {
-            "Chrome" => new ChromeDriver(),
-            "Firefox" => new FirefoxDriver(),
-            "Edge" => new EdgeDriver(),
+            BrowserType.Chrome => new ChromeDriver(),
+            BrowserType.Firefox => new FirefoxDriver(),
+            BrowserType.Edge => new EdgeDriver(),
             _ => new ChromeDriver()
         };
     }
