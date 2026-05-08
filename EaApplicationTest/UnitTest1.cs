@@ -7,15 +7,8 @@ using OpenQA.Selenium.Support.UI;
 
 namespace EaApplicationTest;
 
-public class UnitTest1 : IDisposable
+public class UnitTest1
 {
-    private readonly IWebDriver _driver;
-
-    public UnitTest1()
-    {
-        _driver = GetDriverType(BrowserType.Firefox);
-    }
-
     private static IWebDriver GetDriverType(BrowserType type)
     {
         return type switch
@@ -26,47 +19,49 @@ public class UnitTest1 : IDisposable
             _ => new ChromeDriver()
         };
     }
-    
+
     [Fact]
     public void Test1()
     {
-        _driver.Navigate().GoToUrl("http://localhost:8000");
-
-        _driver.FindElement(By.LinkText("Product")).Click();
+        using var driver = GetDriverType(BrowserType.Chrome);
         
-        _driver.FindElement(By.LinkText("Create")).Click();
+        driver.Navigate().GoToUrl("http://localhost:8000");
 
-        _driver.FindElement(By.Name("Name")).SendKeys("Product 1");
-        _driver.FindElement(By.Name("Description")).SendKeys("Description 1");
-        _driver.FindElement(By.Name("Price")).SendKeys("1000");
+        driver.FindElement(By.LinkText("Product")).Click();
+        
+        driver.FindElement(By.LinkText("Create")).Click();
 
-        var select = new SelectElement(_driver.FindElement(By.Name("ProductType")));
+        driver.FindElement(By.Name("Name")).SendKeys("Product 1");
+        driver.FindElement(By.Name("Description")).SendKeys("Description 1");
+        driver.FindElement(By.Name("Price")).SendKeys("1000");
+
+        var select = new SelectElement(driver.FindElement(By.Name("ProductType")));
         select.SelectByText("CPU");
         
-        _driver.FindElement(By.Id("Create")).Submit();
+        driver.FindElement(By.Id("Create")).Submit();
     }
     
-    [Fact]
-    public void Test2()
+    [Theory]
+    [InlineData(BrowserType.Chrome)]
+    [InlineData(BrowserType.Firefox)]
+    [InlineData(BrowserType.Edge)]
+    public void Test2(BrowserType browserType)
     {
-        _driver.Navigate().GoToUrl("http://localhost:8000");
-
-        _driver.FindElement(By.LinkText("Product")).Click();
+        using var driver = GetDriverType(browserType);
         
-        _driver.FindElement(By.LinkText("Create")).Click();
+        driver.Navigate().GoToUrl("http://localhost:8000");
 
-        _driver.FindElement(By.Name("Name")).SendKeys("Product 2");
-        _driver.FindElement(By.Name("Description")).SendKeys("Description 2");
-        _driver.FindElement(By.Name("Price")).SendKeys("2000");
+        driver.FindElement(By.LinkText("Product")).Click();
+        
+        driver.FindElement(By.LinkText("Create")).Click();
 
-        var select = new SelectElement(_driver.FindElement(By.Name("ProductType")));
+        driver.FindElement(By.Name("Name")).SendKeys("Product 2");
+        driver.FindElement(By.Name("Description")).SendKeys("Description 2");
+        driver.FindElement(By.Name("Price")).SendKeys("2000");
+
+        var select = new SelectElement(driver.FindElement(By.Name("ProductType")));
         select.SelectByText("CPU");
         
-        _driver.FindElement(By.Id("Create")).Submit();
-    }
-
-    public void Dispose()
-    {
-        _driver.Dispose();
+        driver.FindElement(By.Id("Create")).Submit();
     }
 }
