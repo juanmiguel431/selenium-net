@@ -33,7 +33,9 @@ public class UnitTest1
         homePage.ClickProduct();
         productListPage.ClickCreate();
         
-        productFormPage.CreateProduct("Product 1", "Description 1", "1000", "CPU");
+        productFormPage.CreateProduct("Product 1", "Description 1", "3000", "CPU");
+        
+        productListPage.PerformClickOnSpecialValues("Product 1", "Details");
     }
     
     [Theory]
