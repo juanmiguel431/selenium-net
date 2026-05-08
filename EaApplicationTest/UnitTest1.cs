@@ -1,44 +1,42 @@
 ﻿using EaApplicationTest.Models;
+using EaFramework.Config;
+using EaFramework.Driver;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Edge;
-using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 
 namespace EaApplicationTest;
 
 public class UnitTest1
 {
-    private static IWebDriver GetDriverType(BrowserType type)
+    private readonly TestSettings _settings;
+
+    public UnitTest1()
     {
-        return type switch
+        _settings = new TestSettings
         {
-            BrowserType.Chrome => new ChromeDriver(),
-            BrowserType.Firefox => new FirefoxDriver(),
-            BrowserType.Edge => new EdgeDriver(),
-            _ => new ChromeDriver()
+            ApplicationUrl = new Uri("http://localhost:8000"),
+            TimeoutInternal = 30
         };
     }
-
+    
     [Fact]
     public void Test1()
     {
-        using var driver = GetDriverType(BrowserType.Chrome);
+        _settings.BrowserType = BrowserType.Chrome;
+        using var driver = new DriverFixture(_settings);
+
+        driver.Driver.FindElement(By.LinkText("Product")).Click();
         
-        driver.Navigate().GoToUrl("http://localhost:8000");
+        driver.Driver.FindElement(By.LinkText("Create")).Click();
 
-        driver.FindElement(By.LinkText("Product")).Click();
-        
-        driver.FindElement(By.LinkText("Create")).Click();
+        driver.Driver.FindElement(By.Name("Name")).SendKeys("Product 1");
+        driver.Driver.FindElement(By.Name("Description")).SendKeys("Description 1");
+        driver.Driver.FindElement(By.Name("Price")).SendKeys("1000");
 
-        driver.FindElement(By.Name("Name")).SendKeys("Product 1");
-        driver.FindElement(By.Name("Description")).SendKeys("Description 1");
-        driver.FindElement(By.Name("Price")).SendKeys("1000");
-
-        var select = new SelectElement(driver.FindElement(By.Name("ProductType")));
+        var select = new SelectElement(driver.Driver.FindElement(By.Name("ProductType")));
         select.SelectByText("CPU");
         
-        driver.FindElement(By.Id("Create")).Submit();
+        driver.Driver.FindElement(By.Id("Create")).Submit();
     }
     
     [Theory]
@@ -47,21 +45,20 @@ public class UnitTest1
     [InlineData(BrowserType.Edge)]
     public void Test2(BrowserType browserType)
     {
-        using var driver = GetDriverType(browserType);
+        _settings.BrowserType = browserType;
+        using var driver = new DriverFixture(_settings);
+
+        driver.Driver.FindElement(By.LinkText("Product")).Click();
         
-        driver.Navigate().GoToUrl("http://localhost:8000");
+        driver.Driver.FindElement(By.LinkText("Create")).Click();
 
-        driver.FindElement(By.LinkText("Product")).Click();
-        
-        driver.FindElement(By.LinkText("Create")).Click();
+        driver.Driver.FindElement(By.Name("Name")).SendKeys("Product 2");
+        driver.Driver.FindElement(By.Name("Description")).SendKeys("Description 2");
+        driver.Driver.FindElement(By.Name("Price")).SendKeys("2000");
 
-        driver.FindElement(By.Name("Name")).SendKeys("Product 2");
-        driver.FindElement(By.Name("Description")).SendKeys("Description 2");
-        driver.FindElement(By.Name("Price")).SendKeys("2000");
-
-        var select = new SelectElement(driver.FindElement(By.Name("ProductType")));
+        var select = new SelectElement(driver.Driver.FindElement(By.Name("ProductType")));
         select.SelectByText("CPU");
         
-        driver.FindElement(By.Id("Create")).Submit();
+        driver.Driver.FindElement(By.Id("Create")).Submit();
     }
 }
