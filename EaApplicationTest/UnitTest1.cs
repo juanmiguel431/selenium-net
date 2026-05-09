@@ -1,4 +1,5 @@
-﻿using EaApplicationTest.Models;
+﻿using AutoFixture.Xunit2;
+using EaApplicationTest.Models;
 using EaApplicationTest.Pages;
 using EaFramework.Config;
 using EaFramework.Driver;
@@ -37,7 +38,7 @@ public class UnitTest1
         {
             Name = "Product 1",
             Description = "Description 1",
-            Price = 3000,
+            Price = 1000,
             ProductType = ProductType.CPU
         };
         
@@ -67,5 +68,24 @@ public class UnitTest1
         select.SelectByText("CPU");
         
         driver.Driver.FindElement(By.Id("Create")).Submit();
+    }
+    
+    [Theory]
+    [AutoData]
+    public void Test3(Product product)
+    {
+        _settings.BrowserType = BrowserType.Chrome;
+        using var driver = new DriverFixture(_settings);
+        
+        var homePage = new HomePage(driver);
+        var productListPage = new ProductListPage(driver);
+        var productFormPage = new ProductFormPage(driver);
+        
+        homePage.ClickProduct();
+        productListPage.ClickCreate();
+
+        productFormPage.CreateProduct(product);
+        
+        productListPage.PerformClickOnSpecialValues(product.Name, "Details");
     }
 }
