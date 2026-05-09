@@ -24,11 +24,13 @@ public class UnitTest1
     public void Test1()
     {
         _settings.BrowserType = BrowserType.Chrome;
-        using var driver = new DriverFixture(_settings);
+        using var driverFixture = new DriverFixture(_settings);
         
-        var homePage = new HomePage(driver);
-        var productListPage = new ProductListPage(driver);
-        var productFormPage = new ProductFormPage(driver);
+        var driverWait = new DriverWait(driverFixture, _settings);
+        
+        var homePage = new HomePage(driverWait);
+        var productListPage = new ProductListPage(driverWait);
+        var productFormPage = new ProductFormPage(driverWait);
         
         homePage.ClickProduct();
         productListPage.ClickCreate();
@@ -53,20 +55,20 @@ public class UnitTest1
     public void Test2(BrowserType browserType)
     {
         _settings.BrowserType = browserType;
-        using var driver = new DriverFixture(_settings);
+        using var driverFixture = new DriverFixture(_settings);
 
-        driver.Driver.FindElement(By.LinkText("Product")).Click();
+        driverFixture.Driver.FindElement(By.LinkText("Product")).Click();
         
-        driver.Driver.FindElement(By.LinkText("Create")).Click();
+        driverFixture.Driver.FindElement(By.LinkText("Create")).Click();
 
-        driver.Driver.FindElement(By.Name("Name")).SendKeys("Product 2");
-        driver.Driver.FindElement(By.Name("Description")).SendKeys("Description 2");
-        driver.Driver.FindElement(By.Name("Price")).SendKeys("2000");
+        driverFixture.Driver.FindElement(By.Name("Name")).SendKeys("Product 2");
+        driverFixture.Driver.FindElement(By.Name("Description")).SendKeys("Description 2");
+        driverFixture.Driver.FindElement(By.Name("Price")).SendKeys("2000");
 
-        var select = new SelectElement(driver.Driver.FindElement(By.Name("ProductType")));
+        var select = new SelectElement(driverFixture.Driver.FindElement(By.Name("ProductType")));
         select.SelectByText("CPU");
         
-        driver.Driver.FindElement(By.Id("Create")).Submit();
+        driverFixture.Driver.FindElement(By.Id("Create")).Submit();
     }
     
     [Theory]
@@ -74,11 +76,14 @@ public class UnitTest1
     public void Test3(Product product)
     {
         _settings.BrowserType = BrowserType.Chrome;
-        using var driver = new DriverFixture(_settings);
+        using var driverFixture = new DriverFixture(_settings);
         
-        var homePage = new HomePage(driver);
-        var productListPage = new ProductListPage(driver);
-        var productFormPage = new ProductFormPage(driver);
+        
+        var driverWait = new DriverWait(driverFixture, _settings);
+        
+        var homePage = new HomePage(driverWait);
+        var productListPage = new ProductListPage(driverWait);
+        var productFormPage = new ProductFormPage(driverWait);
         
         homePage.ClickProduct();
         productListPage.ClickCreate();

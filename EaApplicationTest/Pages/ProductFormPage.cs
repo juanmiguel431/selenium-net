@@ -8,16 +8,16 @@ namespace EaApplicationTest.Pages;
 
 public class ProductFormPage
 {
-    private readonly IDriverFixture _driver;
+    private readonly IDriverWait _driver;
 
-    public ProductFormPage(IDriverFixture driver)
+    public ProductFormPage(IDriverWait driver)
     {
         _driver = driver;
     }
     
     private IWebElement GetElement(By by)
     {
-        return _driver.Driver.FindElement(by);
+        return _driver.FindElement(by);
     }
     
     private IWebElement NameElement => GetElement(By.Name("Name"));

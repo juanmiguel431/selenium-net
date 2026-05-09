@@ -8,21 +8,21 @@ namespace EaApplicationTest.Pages;
 
 public class ProductListPage
 {
-    private readonly IDriverFixture _driver;
+    private readonly IDriverWait _driver;
 
     private IWebElement CreateLink => GetElement(By.LinkText("Create"));
     
     private IWebElement Table => GetElement(By.CssSelector(".table"));
     
     
-    public ProductListPage(IDriverFixture driver)
+    public ProductListPage(IDriverWait driver)
     {
         _driver = driver;
     }
 
     private IWebElement GetElement(By by)
     {
-        return _driver.Driver.FindElement(by);
+        return _driver.FindElement(by);
     }
     
     public void ClickCreate() => CreateLink.Click();
