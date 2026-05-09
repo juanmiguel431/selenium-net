@@ -1,4 +1,5 @@
-﻿using EaFramework.Driver;
+﻿using EaApplicationTest.Models;
+using EaFramework.Driver;
 using EaFramework.Extensions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
@@ -35,5 +36,10 @@ public class ProductFormPage
         ProductTypeElement.SelectDropdownByText(productType);
         
         ClickCreate();
+    }
+
+    public void CreateProduct(Product product)
+    {
+        CreateProduct(product.Name, product.Description, product.Price.ToString(), product.ProductType.ToString());
     }
 }

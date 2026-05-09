@@ -32,10 +32,18 @@ public class UnitTest1
         
         homePage.ClickProduct();
         productListPage.ClickCreate();
+
+        var product = new Product
+        {
+            Name = "Product 1",
+            Description = "Description 1",
+            Price = 3000,
+            ProductType = ProductType.CPU
+        };
         
-        productFormPage.CreateProduct("Product 1", "Description 1", "3000", "CPU");
+        productFormPage.CreateProduct(product);
         
-        productListPage.PerformClickOnSpecialValues("Product 1", "Details");
+        productListPage.PerformClickOnSpecialValues(product.Name, "Details");
     }
     
     [Theory]
