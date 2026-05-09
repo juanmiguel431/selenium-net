@@ -35,7 +35,7 @@ public class UnitTest1
 
         var product = new Product
         {
-            Name = "Product 1",
+            Name = $"Product 1 - {Guid.NewGuid():N}",
             Description = "Description 1",
             Price = 1000,
             ProductType = ProductType.CPU
@@ -55,12 +55,14 @@ public class UnitTest1
         using var driverManager = new DriverManager(browser, _settings);
         
         var driverWait = new DriverWait(driverManager, _settings);
+        var productListPage = new ProductListPage(driverWait);
         
         driverWait.FindElement(By.LinkText("Product")).Click();
         
         driverWait.FindElement(By.LinkText("Create")).Click();
 
-        driverWait.FindElement(By.Name("Name")).SendKeys(browser.ToString());
+        var productName = $"{browser}-{Guid.NewGuid():N}";
+        driverWait.FindElement(By.Name("Name")).SendKeys(productName);
         driverWait.FindElement(By.Name("Description")).SendKeys(description);
         driverWait.FindElement(By.Name("Price")).SendKeys(price);
 
@@ -68,6 +70,10 @@ public class UnitTest1
         select.SelectByText(productType);
         
         driverManager.Driver.FindElement(By.Id("Create")).Submit();
+        
+        Assert.True(
+            productListPage.ProductExists(productName),
+            $"The product '{productName}' was not found in the product list after creating it in {browser}.");
     }
     
     [Theory]

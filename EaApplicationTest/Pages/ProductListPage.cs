@@ -26,6 +26,13 @@ public class ProductListPage
     }
     
     public void ClickCreate() => CreateLink.Click();
+
+    public bool ProductExists(string name)
+    {
+        return Table.ReadTable().Any(p =>
+            p.ColumnName == "Name"
+            && p.ColumnValue == name);
+    }
     
     public void PerformClickOnSpecialValues(string name, string operation)
     {
