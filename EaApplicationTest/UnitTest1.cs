@@ -47,10 +47,10 @@ public class UnitTest1
     }
     
     [Theory]
-    [InlineData(Browser.Chrome, "Product 3", "Description 3", "3000", "CPU")]
-    [InlineData(Browser.Firefox, "Product 4", "Description 4", "4000", "CPU")]
-    [InlineData(Browser.Edge, "Product 5", "Description 5", "5000", "CPU")]
-    public void Test2(Browser browser, string name, string description, string price, string productType)
+    [InlineData(Browser.Chrome, "Description 3", "3000", "CPU")]
+    [InlineData(Browser.Firefox, "Description 4", "4000", "CPU")]
+    [InlineData(Browser.Edge, "Description 5", "5000", "CPU")]
+    public void Test2(Browser browser, string description, string price, string productType)
     {
         using var driverManager = new DriverManager(browser, _settings);
         
@@ -60,7 +60,7 @@ public class UnitTest1
         
         driverWait.FindElement(By.LinkText("Create")).Click();
 
-        driverWait.FindElement(By.Name("Name")).SendKeys(name);
+        driverWait.FindElement(By.Name("Name")).SendKeys(browser.ToString());
         driverWait.FindElement(By.Name("Description")).SendKeys(description);
         driverWait.FindElement(By.Name("Price")).SendKeys(price);
 
