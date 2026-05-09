@@ -16,7 +16,7 @@ public class DriverFixture : IDriverFixture
     {
         _settings = settings;
         Driver = GetDriverType(_settings.BrowserType);
-        Driver.Navigate().GoToUrl(_settings.ApplicationUrl);
+        Driver.Navigate().GoToUrl(_settings.BaseUrl);
     }
 
     private static IWebDriver GetDriverType(BrowserType type)

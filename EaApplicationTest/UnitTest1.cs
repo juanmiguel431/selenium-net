@@ -1,8 +1,10 @@
 ﻿using AutoFixture.Xunit2;
 using EaApplicationTest.Models;
 using EaApplicationTest.Pages;
+using EaApplicationTest.Utils;
 using EaFramework.Config;
 using EaFramework.Driver;
+using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
@@ -14,11 +16,8 @@ public class UnitTest1
 
     public UnitTest1()
     {
-        _settings = new TestSettings
-        {
-            ApplicationUrl = new Uri("http://localhost:8000"),
-            TimeoutInternal = 30
-        };
+        var configuration = AppUtils.LoadConfiguration();
+        _settings = configuration.GetSection("TestConfig").Get<TestSettings>() ?? throw new Exception("appsettings.json is not configured");
     }
     
     [Fact]
