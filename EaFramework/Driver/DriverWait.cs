@@ -6,21 +6,21 @@ namespace EaFramework.Driver;
 
 public class DriverWait : IDriverWait
 {
-    private readonly IDriverFixture _driverFixture;
+    private readonly IDriverManager _driverManager;
     private readonly TestSettings _settings;
     private readonly Lazy<WebDriverWait> _webDriverWait;
 
-    public DriverWait(IDriverFixture driverFixture, TestSettings settings)
+    public DriverWait(IDriverManager driverManager, TestSettings settings)
     {
-        _driverFixture = driverFixture;
+        _driverManager = driverManager;
         _settings = settings;
-        _webDriverWait = new Lazy<WebDriverWait>(GetWaitDriver);
+        _webDriverWait = new Lazy<WebDriverWait>(GetDriverWait);
     }
 
-    private WebDriverWait GetWaitDriver()
+    private WebDriverWait GetDriverWait()
     {
         var timeout = TimeSpan.FromMilliseconds(_settings.TimeoutInterval ?? 500);
-        return new WebDriverWait(_driverFixture.Driver, timeout)
+        return new WebDriverWait(_driverManager.Driver, timeout)
         {
             PollingInterval = TimeSpan.FromMilliseconds(_settings.PollingInterval ?? 500)
         };

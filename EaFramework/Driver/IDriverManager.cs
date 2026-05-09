@@ -2,7 +2,7 @@
 
 namespace EaFramework.Driver;
 
-public interface IDriverFixture : IDisposable
+public interface IDriverManager : IDisposable
 {
     IWebDriver Driver { get; }
     void NavigateToUrl(string url);
